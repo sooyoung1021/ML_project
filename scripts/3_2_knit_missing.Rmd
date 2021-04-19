@@ -1,0 +1,68 @@
+---
+title: "Supplementary material"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = F, message = F)
+source(here::here("scripts", "0_functions.R"))
+source(here::here("scripts", "1_load_and_clean.R"))
+source(here::here("scripts", "3_check_missing.R"))
+
+pacman::p_load(gt, gtsummary, flextable)
+```
+
+\scriptsize
+# Checking for missingness
+
+## Variables that are MCAR
+```{r}
+print(sprintf("%s are likley to be MCAR",
+              paste0(features[!features %in% missing_corr$var1],
+                     collapse=", ")))
+```
+## Variables that are MAR but not MCAR
+```{r}
+print(sprintf("%s are likley to be MAR",
+              paste0(features[features %in% missing_corr$var1],
+                     collapse=", ")))
+```
+
+### Table S1. Missingness of features correlated with other features
+```{r}
+colnames(missing_corr)[2:4] <- c("Correlated feature",
+                                 "Correlation coefficient",
+                                 "p-value")
+missing_corr %>% gt(groupname_col = "var1") %>%
+  fmt_missing(
+    columns = 'p-value',
+    missing_text = ""
+  )%>%
+  cols_align(
+  align = "left",
+  columns = everything()
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+      ),
+    locations = cells_row_groups()
+  ) 
+  
+```
+
+```{r, results = 'asis'}
+for(i in 1:length(cat_result)){
+  cat(sprintf("\n\n### Table S%i. %s\n",
+                i+1,
+                names(cat_result)[i]))
+  gtsummary::tbl_regression(cat_result[[i]], 
+                                   exponentiat=T)%>%
+           gtsummary::as_gt() %>%
+           print()
+ }
+```
