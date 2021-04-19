@@ -1,0 +1,35 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# GPH2338 Final project
+# Sooyoung Kim, Jessica Randazzo
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+This git repository contains all the scripts and data to run our final project for GPH2338.
+
+## How to run the analysis
+
+* All scripts are saved in the "scripts" folder.
+* You should run all the scripts except for "999_github.R" in the order marked in the file name.
+
+## Data
+
+* The data to run the analysis is saved in the data folder.
+* The script "1_load_and_clean.R" will automatically load the data and clean it for the analysis
+
+
+## For any questions
+
+* You can contact either Soo (sk9076@nyu.edu) or Jess (jlr9719@nyu.edu)
