@@ -261,9 +261,13 @@ gen_tab_1 <- function(data){
 # helper function for CV for logistic regression
 cost <- function(r, pi=0) mean(abs(r-pi)> 0.5)
 
-pred_test <- function(mod, dat, var, logmod = F, cutoff=0.5){
+pred_test <- function(mod, dat, var, logmod = F, cutoff=0.5, type= NA){
   if(logmod){
     pred <- ifelse(predict(mod, newdata = dat, type = "response")>cutoff, 1, 0)
+  }else if(type == "class"){
+    pred <- predict(mod, newdata = dat, type = "class")
+  }else if(type == "lda"){
+    pred <- predict(mod, newdata = dat, type = "class")$class
   }else{
     pred <- predict(mod, newdata = dat)
   }
@@ -276,9 +280,13 @@ pred_test <- function(mod, dat, var, logmod = F, cutoff=0.5){
 }
 
 # specificity
-specificity <- function(mod, dat, var, cutoff = 0.5, logmod = F){
+specificity <- function(mod, dat, var, cutoff = 0.5, logmod = F, type = NA){
   if(logmod){
     pred <- ifelse(predict(mod, newdata = dat, type = "response")>cutoff, 1, 0)
+  }else if(type == "class"){
+    pred <- predict(mod, newdata = dat, type = "class")
+  }else if(type == "lda"){
+    pred <- predict(mod, newdata = dat, type = "class")$class
   }else{
     pred <- predict(mod, newdata = dat)
   }
@@ -291,9 +299,13 @@ specificity <- function(mod, dat, var, cutoff = 0.5, logmod = F){
 }
 
 #sensitivity
-sensitivity <- function(mod, dat, var, cutoff = 0.5, logmod = F){
+sensitivity <- function(mod, dat, var, cutoff = 0.5, logmod = F, type = NA){
   if(logmod){
     pred <- ifelse(predict(mod, newdata = dat, type = "response")>cutoff, 1, 0)
+  }else if(type == "class"){
+    pred <- predict(mod, newdata = dat, type = "class")
+  }else if(type == "lda"){
+      pred <- predict(mod, newdata = dat, type = "class")$class
   }else{
     pred <- predict(mod, newdata = dat)
   }
