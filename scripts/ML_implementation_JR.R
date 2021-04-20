@@ -66,10 +66,6 @@ mean(lda.class!=hp_train$fin_hardship)
 
 saveRDS(lda.fit, file = "ldafit.rds")
 
-  #false discovery rate
-f_discov_rate(, hp_test, "fin_hardship", logmod = T)
-  #false omission rate
-
 
 #LDA is popular when we have more than 2 response classes. LDA is more stable 
   #when n is small. LDA is better than logistic when the classes are well separated.

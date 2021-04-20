@@ -64,11 +64,11 @@ mod_log_final <- glm(formula = as.formula(paste0(choice_log@formulas[[which.min(
 
 
 # Test error
-pred_test(mod_log_final, hp_test, "fin_hardship", logmod=T)
+pred_test(mod_log_final, hp_test, "fin_hardship", type = "response", logmod=T)
 
 # FDR and FOR
-specificity(mod_log_final, hp_test, "fin_hardship", logmod=T)
-sensitivity(mod_log_final, hp_test, "fin_hardship", logmod=T)
+specificity(mod_log_final, hp_test, "fin_hardship", type = "response", logmod=T)
+sensitivity(mod_log_final, hp_test, "fin_hardship", type = "response", logmod=T)
 
 
 # see if changing the cutoff results in better performance
@@ -139,16 +139,16 @@ mod_svm3 <- tune(svm,
 
 ### Radial kernel
 # Test error
-pred_test(mod_svm2$best.model, hp_test, "fin_hardship")
+pred_test(mod_svm2$best.model, hp_test, "fin_hardship", type ="")
 
 # FDR and FOR
-specificity(mod_svm2$best.model, hp_test, "fin_hardship")
-sensitivity(mod_svm2$best.model, hp_test, "fin_hardship")
+specificity(mod_svm2$best.model, hp_test, "fin_hardship", type ="")
+sensitivity(mod_svm2$best.model, hp_test, "fin_hardship", type = "")
 
 ### Linear kernel
 # Test error
-pred_test(mod_svm3$best.model, hp_test, "fin_hardship")
+pred_test(mod_svm3$best.model, hp_test, "fin_hardship", type ="")
 
 # FDR and FOR
-specificity(mod_svm3$best.model, hp_test, "fin_hardship")
-sensitivity(mod_svm3$best.model, hp_test, "fin_hardship")
+specificity(mod_svm3$best.model, hp_test, "fin_hardship", type ="")
+sensitivity(mod_svm3$best.model, hp_test, "fin_hardship", type ="")
