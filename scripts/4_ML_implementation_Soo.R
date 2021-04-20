@@ -67,34 +67,34 @@ mod_log_final <- glm(formula = as.formula(paste0(choice_log@formulas[[which.min(
 pred_test(mod_log_final, hp_test, "fin_hardship", logmod=T)
 
 # FDR and FOR
-f_discov_rate(mod_log_final, hp_test, "fin_hardship", logmod=T)
-f_omit_rate(mod_log_final, hp_test, "fin_hardship", logmod=T)
+specificity(mod_log_final, hp_test, "fin_hardship", logmod=T)
+sensitivity(mod_log_final, hp_test, "fin_hardship", logmod=T)
 
 
 # see if changing the cutoff results in better performance
 cut_change <- data.frame(
   cutoff = seq(0.1, 0.9, 0.05),
   test.err = rep(NA, length(seq(0.1, 0.9, 0.05))),
-  FDR = rep(NA, length(seq(0.1, 0.9, 0.05))),
-  FOR = rep(NA, length(seq(0.1, 0.9, 0.05)))
+  Specificity = rep(NA, length(seq(0.1, 0.9, 0.05))),
+  Sensitivity = rep(NA, length(seq(0.1, 0.9, 0.05)))
 )
 
 for(cut in seq(0.1, 0.9, 0.05)){
   cut_change$test.err[which(cut_change$cutoff==cut)] <-
     pred_test(mod_log_final, hp_test, "fin_hardship", cutoff = cut, logmod=T)[[1]]
-  cut_change$FDR[which(cut_change$cutoff==cut)] <-
-    f_discov_rate(mod_log_final, hp_test, "fin_hardship", cutoff = cut, logmod=T)[[1]]
-  cut_change$FOR[which(cut_change$cutoff==cut)] <-
-    f_omit_rate(mod_log_final, hp_test, "fin_hardship", cutoff = cut, logmod=T)[[1]]
+  cut_change$Specificity[which(cut_change$cutoff==cut)] <-
+    specificity(mod_log_final, hp_test, "fin_hardship", cutoff = cut, logmod=T)[[1]]
+  cut_change$Sensitivity[which(cut_change$cutoff==cut)] <-
+    sensitivity(mod_log_final, hp_test, "fin_hardship", cutoff = cut, logmod=T)[[1]]
 }
 
 ggplot(cut_change) + 
   geom_point(aes(cutoff, unlist(test.err), color = "Misclassification rate")) + geom_path(aes(cutoff, unlist(test.err), color = "Misclassification rate")) +
-  geom_point(aes(cutoff, unlist(FDR), color = "False discovery rate")) + geom_path(aes(cutoff, unlist(FDR), color = "False discovery rate")) +
-  geom_point(aes(cutoff, unlist(FOR), color = "False ommission rate")) + geom_path(aes(cutoff, unlist(FOR), color = "False ommission rate")) +
+  geom_point(aes(cutoff, unlist(Specificity), color = "Specificity")) + geom_path(aes(cutoff, unlist(Specificity), color = "Specificity")) +
+  geom_point(aes(cutoff, unlist(Sensitivity), color = "Sensitivity")) + geom_path(aes(cutoff, unlist(Sensitivity), color = "Sensitivity")) +
   xlab("Classification cutoff") +
   ylab("Test error rate") +
-  theme(legend.position = c(0.8, 0.8))
+  theme(legend.position = c(0.8, 0.4))
   
 
 # SVM - doesn't work with the full traning set
@@ -142,13 +142,13 @@ mod_svm3 <- tune(svm,
 pred_test(mod_svm2$best.model, hp_test, "fin_hardship")
 
 # FDR and FOR
-f_discov_rate(mod_svm2$best.model, hp_test, "fin_hardship")
-f_omit_rate(mod_svm2$best.model, hp_test, "fin_hardship")
+specificity(mod_svm2$best.model, hp_test, "fin_hardship")
+sensitivity(mod_svm2$best.model, hp_test, "fin_hardship")
 
 ### Linear kernel
 # Test error
 pred_test(mod_svm3$best.model, hp_test, "fin_hardship")
 
 # FDR and FOR
-f_discov_rate(mod_svm3$best.model, hp_test, "fin_hardship")
-f_omit_rate(mod_svm3$best.model, hp_test, "fin_hardship")
+specificity(mod_svm3$best.model, hp_test, "fin_hardship")
+sensitivity(mod_svm3$best.model, hp_test, "fin_hardship")

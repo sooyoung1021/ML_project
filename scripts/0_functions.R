@@ -275,30 +275,32 @@ pred_test <- function(mod, dat, var, logmod = F, cutoff=0.5){
   return(list(test_err_log, tab_log))
 }
 
-f_discov_rate <- function(mod, dat, var, cutoff = 0.5, logmod = F){
+# specificity
+specificity <- function(mod, dat, var, cutoff = 0.5, logmod = F){
   if(logmod){
     pred <- ifelse(predict(mod, newdata = dat, type = "response")>cutoff, 1, 0)
   }else{
     pred <- predict(mod, newdata = dat)
   }
   tab_log <- table(Predicted = pred, Expected = dat[,var])
-  fdr_log <- tab_log[2,1]/(tab_log[2,1]+tab_log[2,2])
+  fdr_log <- tab_log[1,1]/(tab_log[1,1]+tab_log[1,2])
   
-  print(sprintf("False discovery rate (1-PPV) = %.4f", fdr_log))
+  print(sprintf("Specificity rate  = %.4f", fdr_log))
   
   return(fdr_log)
 }
 
-f_omit_rate <- function(mod, dat, var, cutoff = 0.5, logmod = F){
+#sensitivity
+sensitivity <- function(mod, dat, var, cutoff = 0.5, logmod = F){
   if(logmod){
     pred <- ifelse(predict(mod, newdata = dat, type = "response")>cutoff, 1, 0)
   }else{
     pred <- predict(mod, newdata = dat)
   }
   tab_log <- table(Predicted = pred, Expected = dat[,var])
-  for_log <- tab_log[1,2]/(tab_log[1,1]+tab_log[1,2])
+  for_log <- tab_log[2,2]/(tab_log[2,2]+tab_log[2,1])
   
-  print(sprintf("False omission rate (1-NPV) = %.4f", for_log))
+  print(sprintf("Sensitivity rate  = %.4f", for_log))
   
   return(for_log)
 }
